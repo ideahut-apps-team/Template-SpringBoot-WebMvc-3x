@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManagerFactory;
 import net.ideahut.springboot.helper.HibernateHelper;
 import net.ideahut.springboot.helper.ObjectHelper;
 import net.ideahut.springboot.template.app.AppProperties;
+import net.ideahut.springboot.template.app.AppProperties.TrxDatasource;
 
 @Configuration
 @EnableTransactionManagement
@@ -28,14 +29,14 @@ class TrxManagerSecondaryConfig {
 	EntityManagerFactory entityManagerFactory(
 		AppProperties appProperties
 	) throws Exception {
-		AppProperties.TrxMain mainDefinition = appProperties.getTrxManager().getSecondary();
-		AppProperties.TrxAudit auditDefinition = ObjectHelper.useOrDefault(mainDefinition.getAudit(), AppProperties.TrxAudit::new);
+		AppProperties.TrxMain trxMain = appProperties.getTrxManager().getSecondary();
+		AppProperties.TrxAudit trxAudit = ObjectHelper.useOrDefault(trxMain.getAudit(), AppProperties.TrxAudit::new);
 		return HibernateHelper.createEntityManagerFactory(
-			AppProperties.TrxDatasource.getDefinition(mainDefinition.getDatasource()), 
-			mainDefinition, 
-			auditDefinition.getId(), 
-			AppProperties.TrxDatasource.getDefinition(auditDefinition.getDatasource()), 
-			auditDefinition
+			TrxDatasource.getDefinition(trxMain.getDatasource()), 
+			trxMain, 
+			trxAudit.getId(), 
+			TrxDatasource.getDefinition(trxAudit.getDatasource()), 
+			trxAudit
 		);
 	}
 
