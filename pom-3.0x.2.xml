@@ -20,6 +20,7 @@
 	</parent>
 	
 	<properties>
+		<image-name>Template-SpringBoot-WebMvc-3x</image-name>
 		<main-class>net.ideahut.springboot.template.Application</main-class>
 		
 		<maven.test.skip>true</maven.test.skip>
@@ -404,7 +405,7 @@
 				<groupId>org.graalvm.buildtools</groupId>
 				<artifactId>native-maven-plugin</artifactId>
 				<configuration>
-					<imageName>template-springboot-mvc-3x</imageName>
+					<imageName>${image-name}</imageName>
 					<metadataRepository>
 				    	<enabled>true</enabled>
 				    </metadataRepository>
