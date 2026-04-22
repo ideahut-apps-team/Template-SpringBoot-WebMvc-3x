@@ -12982,6 +12982,8 @@
   }, {
     "type" : "jdk.internal.misc.Unsafe"
   }, {
+    "type" : "jdk.internal.reflect.DirectMethodHandleAccessor"
+  }, {
     "type" : "jdk.management.VirtualThreadSchedulerMXBean"
   }, {
     "type" : "jdk.management.jfr.ConfigurationInfo"
@@ -28060,6 +28062,8 @@
   }, {
     "type" : "net.ideahut.springboot.grid.GridSourceHessianSerializer"
   }, {
+    "type" : "net.ideahut.springboot.helper.AgroalHelper"
+  }, {
     "type" : "net.ideahut.springboot.helper.ErrorHelper",
     "methods" : [ {
       "name" : "<init>",
@@ -28366,6 +28370,8 @@
       "name" : "setVersion",
       "parameterTypes" : [ "java.lang.String" ]
     } ]
+  }, {
+    "type" : "net.ideahut.springboot.helper.HibernateHelper"
   }, {
     "type" : "net.ideahut.springboot.helper.HikariHelper",
     "fields" : [ {
@@ -41801,6 +41807,8 @@
       "parameterTypes" : [ "java.lang.Class" ]
     } ]
   }, {
+    "type" : "net.ideahut.springboot.template.config.TrxManagerPrimaryConfig__BeanDefinitions"
+  }, {
     "type" : "net.ideahut.springboot.template.config.TrxManagerSecondaryConfig"
   }, {
     "type" : "net.ideahut.springboot.template.config.TrxManagerSecondaryConfig$$SpringCGLIB$$0",
@@ -48353,15 +48361,35 @@
   }, {
     "type" : "org.springframework.beans.factory.annotation.Qualifier"
   }, {
+    "type" : "org.springframework.beans.factory.aot.BeanInstanceSupplier"
+  }, {
     "type" : "org.springframework.beans.factory.config.AbstractFactoryBean"
   }, {
     "type" : "org.springframework.beans.factory.config.BeanPostProcessor"
+  }, {
+    "type" : "org.springframework.beans.factory.config.DependencyDescriptor"
   }, {
     "type" : "org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor"
   }, {
     "type" : "org.springframework.beans.factory.config.SmartInstantiationAwareBeanPostProcessor"
   }, {
+    "type" : "org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory"
+  }, {
+    "type" : "org.springframework.beans.factory.support.AbstractBeanFactory"
+  }, {
+    "type" : "org.springframework.beans.factory.support.BeanDefinitionValueResolver"
+  }, {
+    "type" : "org.springframework.beans.factory.support.ConstructorResolver"
+  }, {
+    "type" : "org.springframework.beans.factory.support.DefaultListableBeanFactory"
+  }, {
+    "type" : "org.springframework.beans.factory.support.DefaultSingletonBeanRegistry"
+  }, {
     "type" : "org.springframework.beans.factory.support.NullBean"
+  }, {
+    "type" : "org.springframework.beans.factory.support.RegisteredBean"
+  }, {
+    "type" : "org.springframework.beans.factory.support.SimpleInstantiationStrategy"
   }, {
     "type" : "org.springframework.boot.ApplicationProperties",
     "methods" : [ {
@@ -48374,6 +48402,8 @@
       "name" : "<init>",
       "parameterTypes" : [ ]
     } ]
+  }, {
+    "type" : "org.springframework.boot.SpringApplication"
   }, {
     "type" : "org.springframework.boot.SpringBootConfiguration"
   }, {
@@ -48441,6 +48471,18 @@
   }, {
     "type" : "org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration"
   }, {
+    "type" : "org.springframework.boot.autoconfigure.data.redis.RedisUrlSyntaxFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.diagnostics.analyzer.NoSuchBeanDefinitionFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.beans.factory.BeanFactory" ]
+    } ]
+  }, {
     "type" : "org.springframework.boot.autoconfigure.freemarker.FreeMarkerTemplateAvailabilityProvider",
     "methods" : [ {
       "name" : "<init>",
@@ -48497,6 +48539,30 @@
   }, {
     "type" : "org.springframework.boot.autoconfigure.jackson.JacksonProperties"
   }, {
+    "type" : "org.springframework.boot.autoconfigure.jdbc.DataSourceBeanCreationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.core.env.Environment" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.jdbc.HikariDriverConfigurationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.jooq.JaxbNotAvailableExceptionFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.jooq.NoDslContextBeanFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.beans.factory.BeanFactory" ]
+    } ]
+  }, {
     "type" : "org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener",
     "methods" : [ {
       "name" : "<init>",
@@ -48504,6 +48570,36 @@
     } ]
   }, {
     "type" : "org.springframework.boot.autoconfigure.mustache.MustacheTemplateAvailabilityProvider",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.r2dbc.ConnectionFactoryBeanCreationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.core.env.Environment" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.r2dbc.MissingR2dbcPoolDependencyFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.r2dbc.MultipleConnectionPoolConfigurationsFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.r2dbc.NoConnectionFactoryBeanFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.autoconfigure.ssl.BundleContentNotWatchableFailureAnalyzer",
     "methods" : [ {
       "name" : "<init>",
       "parameterTypes" : [ ]
@@ -48652,6 +48748,12 @@
   }, {
     "type" : "org.springframework.boot.context.config.ConfigDataNotFoundAction"
   }, {
+    "type" : "org.springframework.boot.context.config.ConfigDataNotFoundFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
     "type" : "org.springframework.boot.context.config.ConfigDataProperties"
   }, {
     "type" : "org.springframework.boot.context.config.ConfigTreeConfigDataLoader",
@@ -48708,7 +48810,127 @@
   }, {
     "type" : "org.springframework.boot.context.properties.EnableConfigurationProperties"
   }, {
+    "type" : "org.springframework.boot.context.properties.IncompatibleConfigurationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.context.properties.NotConstructorBoundInjectionFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
     "type" : "org.springframework.boot.context.properties.bind.Name"
+  }, {
+    "type" : "org.springframework.boot.diagnostics.FailureAnalyzers",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.context.ConfigurableApplicationContext" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.AotInitializerNotFoundFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.BeanCurrentlyInCreationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.beans.factory.BeanFactory" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.BeanDefinitionOverrideFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.BeanNotOfRequiredTypeFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.BindFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.BindValidationFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.InvalidConfigurationPropertyNameFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.InvalidConfigurationPropertyValueFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.core.env.Environment" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.MissingParameterNamesFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.MutuallyExclusiveConfigurationPropertiesFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.core.env.Environment" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.NoSuchMethodFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.NoUniqueBeanDefinitionFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ "org.springframework.beans.factory.BeanFactory" ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.PatternParseFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.PortInUseFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.UnboundConfigurationPropertyFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
+    "type" : "org.springframework.boot.diagnostics.analyzer.ValidationExceptionFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
   }, {
     "type" : "org.springframework.boot.env.EnvironmentPostProcessorApplicationListener",
     "methods" : [ {
@@ -48770,7 +48992,13 @@
   }, {
     "type" : "org.springframework.boot.jackson.JsonMixinModuleEntries"
   }, {
+    "type" : "org.springframework.boot.liquibase.LiquibaseChangelogMissingFailureAnalyzer"
+  }, {
+    "type" : "org.springframework.boot.loader.launch.JarLauncher"
+  }, {
     "type" : "org.springframework.boot.loader.launch.LaunchedClassLoader"
+  }, {
+    "type" : "org.springframework.boot.loader.launch.Launcher"
   }, {
     "type" : "org.springframework.boot.loader.net.protocol.jar.JarUrlClassLoader"
   }, {
@@ -48816,6 +49044,12 @@
   }, {
     "type" : "org.springframework.boot.validation.beanvalidation.MethodValidationExcludeFilter"
   }, {
+    "type" : "org.springframework.boot.web.context.MissingWebServerFactoryBeanFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
+  }, {
     "type" : "org.springframework.boot.web.context.ServerPortInfoApplicationContextInitializer",
     "methods" : [ {
       "name" : "<init>",
@@ -48823,6 +49057,12 @@
     } ]
   }, {
     "type" : "org.springframework.boot.web.embedded.tomcat.ConfigurableTomcatWebServerFactory"
+  }, {
+    "type" : "org.springframework.boot.web.embedded.tomcat.ConnectorStartFailureAnalyzer",
+    "methods" : [ {
+      "name" : "<init>",
+      "parameterTypes" : [ ]
+    } ]
   }, {
     "type" : "org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer"
   }, {
@@ -48957,6 +49197,8 @@
       "parameterTypes" : [ "jakarta.servlet.ServletContext" ]
     } ]
   }, {
+    "type" : "org.springframework.cglib.proxy.MethodProxy"
+  }, {
     "type" : "org.springframework.context.ApplicationContextAware"
   }, {
     "type" : "org.springframework.context.ApplicationEventPublisherAware"
@@ -48996,6 +49238,8 @@
   }, {
     "type" : "org.springframework.context.annotation.Configuration"
   }, {
+    "type" : "org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor"
+  }, {
     "type" : "org.springframework.context.annotation.ConfigurationClassEnhancer$EnhancedConfiguration"
   }, {
     "type" : "org.springframework.context.annotation.Import"
@@ -49011,6 +49255,8 @@
     "type" : "org.springframework.context.annotation.Role"
   }, {
     "type" : "org.springframework.context.annotation.Scope"
+  }, {
+    "type" : "org.springframework.context.support.AbstractApplicationContext"
   }, {
     "type" : "org.springframework.context.support.ApplicationObjectSupport"
   }, {
@@ -52260,6 +52506,10 @@
     "type" : "org.springframework.util.ConcurrentReferenceHashMap$Segment[]"
   }, {
     "type" : "org.springframework.util.PathMatcher"
+  }, {
+    "type" : "org.springframework.util.function.ThrowingBiFunction"
+  }, {
+    "type" : "org.springframework.util.function.ThrowingSupplier"
   }, {
     "type" : "org.springframework.util.unit.DataSizeEditor"
   }, {
