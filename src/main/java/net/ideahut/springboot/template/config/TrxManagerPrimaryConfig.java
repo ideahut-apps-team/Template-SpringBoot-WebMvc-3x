@@ -34,7 +34,7 @@ class TrxManagerPrimaryConfig {
 	@Bean(PREFIX + "EntityManagerFactory")
 	EntityManagerFactory entityManagerFactory(
 		AppProperties appProperties
-	) throws Exception {
+	) {
 		AppProperties.TrxMain trxMain = appProperties.getTrxManager().getPrimary();
 		AppProperties.TrxAudit trxAudit = ObjectHelper.useOrDefault(trxMain.getAudit(), AppProperties.TrxAudit::new);
 		return HibernateHelper.createEntityManagerFactory(

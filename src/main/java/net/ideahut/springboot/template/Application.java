@@ -86,7 +86,7 @@ public class Application extends WebMvcLauncher {
 		String message, 
 		Throwable throwable
 	) {
-		level = ObjectHelper.useOrDefault(level, () -> LauncherDefinition.Log.Level.DEBUG);
+		level = ObjectHelper.useOrDefault(level, LauncherDefinition.Log.Level.DEBUG);
 		log.atLevel(org.slf4j.event.Level.valueOf(level.name())).log(message, throwable);
 	}
 	

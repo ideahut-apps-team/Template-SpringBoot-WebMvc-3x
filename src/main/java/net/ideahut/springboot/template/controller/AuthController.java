@@ -20,6 +20,7 @@ import net.ideahut.springboot.template.service.AuthService;
 /*
  * API untuk login & logout
  */
+@Public
 @ComponentScan
 @RestController
 @RequestMapping("/auth")
@@ -37,7 +38,6 @@ class AuthController {
 		this.apiService = apiService;
 	}
 	
-	@Public
 	@PostMapping("/login")
 	public ApiAuth login(
 		HttpServletRequest httpRequest,
@@ -49,7 +49,6 @@ class AuthController {
 		return apiAuth != null ? apiAuth.setApiAccess(null).setApiKey(null) : null;
 	}
 	
-	@Public
 	@RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
 	public ApiAccess logout(
 		HttpServletRequest httpRequest
@@ -58,7 +57,6 @@ class AuthController {
 		return authService.logout(apiRequest);
 	}
 	
-	@Public
 	@RequestMapping(value = "/info", method = {RequestMethod.GET, RequestMethod.POST})
 	public ApiAccess info(
 		HttpServletRequest httpRequest	

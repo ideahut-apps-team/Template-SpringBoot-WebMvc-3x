@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import net.ideahut.springboot.annotation.Body;
 import net.ideahut.springboot.annotation.Public;
 import net.ideahut.springboot.helper.ErrorHelper;
 import net.ideahut.springboot.helper.FrameworkHelper;
@@ -58,7 +57,7 @@ class ReportController implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		String path = appProperties.getReportPath();
 		ErrorHelper.throwBlank(path, () -> "AppProperties.reportPath is required");
-		path = FrameworkHelper.replacePath(appProperties.getReportPath());
+		path = FrameworkHelper.replacePath(path);
 		path = StringHelper.removeEnd(path, "/");
 		template = FrameworkHelper.toByteArray(FrameworkHelper.getResource(path + "/sample.jasper"));
 		imageHeader = FrameworkHelper.toByteArray(FrameworkHelper.getResource(path + "/tree1.png"));
@@ -66,13 +65,12 @@ class ReportController implements InitializingBean {
 	}
 	
 	@Public
-	@Body
 	@GetMapping
 	public ResponseEntity<StreamingResponseBody> get(
 		@RequestParam("name") String name
 	) {
 		ReportType type = getType(name);
-		StreamingResponseBody body = response -> {
+		StreamingResponseBody body = stream -> {
 			try {
 				JasperReport report = (JasperReport) JRLoader.loadObject(new ByteArrayInputStream(template));
 				ReportInput input = new ReportInput();
@@ -93,7 +91,7 @@ class ReportController implements InitializingBean {
 					datasource.add(data);
 				}
 				input.setDatasource(datasource);
-				reportHandler.exportReport(input, response);
+				reportHandler.exportReport(input, stream);
 			} catch (Exception e) {
 				throw ErrorHelper.exception(e);
 			}

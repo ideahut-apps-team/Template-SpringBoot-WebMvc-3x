@@ -25,7 +25,7 @@ import net.ideahut.springboot.crud.Relation;
 import net.ideahut.springboot.entity.EntityInfo;
 import net.ideahut.springboot.entity.TrxManagerInfo;
 import net.ideahut.springboot.helper.ObjectHelper;
-import net.ideahut.springboot.object.MapStringObject;
+import net.ideahut.springboot.object.MapObject;
 import net.ideahut.springboot.object.Page;
 import net.ideahut.springboot.object.Result;
 import net.ideahut.springboot.template.entity.AutoGenStrIdHardDel;
@@ -68,7 +68,7 @@ class BulkController {
 		BulkList list = new BulkList()
 		.setUseNative(useNative)
 		.setStateless(!Boolean.FALSE.equals(stateless))
-		.setTrxManagerInfo(ObjectHelper.callIf(Boolean.TRUE.equals(oneSession), () -> trxManagerInfo));
+		.setTrxManagerInfo(Boolean.TRUE.equals(oneSession) ? trxManagerInfo : null);
 		
 		CompositeHardDel compositeHardDel = new CompositeHardDel(1, "A");
 		compositeHardDel.setName("COBA");
@@ -92,9 +92,9 @@ class BulkController {
 			.setAfter(0)
 			.addValue(
 				CrudRequest.value(longIdJoinComposite)
-				.setValue("composite", new MapStringObject()
-					.setValue("type", "{[0].type}")
-					.setValue("code", "{[0].code}")
+				.assign("composite", new MapObject()
+					.assign("type", "{[0].type}")
+					.assign("code", "{[0].code}")
 				)
 			)
 		);
@@ -142,7 +142,7 @@ class BulkController {
 		BulkMap map = new BulkMap()
 		.setUseNative(useNative)
 		.setStateless(!Boolean.FALSE.equals(stateless))
-		.setTrxManagerInfo(ObjectHelper.callIf(Boolean.TRUE.equals(oneSession), () -> trxManagerInfo));
+		.setTrxManagerInfo(Boolean.TRUE.equals(oneSession) ? trxManagerInfo : null);
 		
 		EmbeddedHardDel embeddedHardDel = new EmbeddedHardDel(new EmbededId(1, "A"));
 		embeddedHardDel.setName("COBA");
@@ -169,10 +169,10 @@ class BulkController {
 			.setAfter("EmbeddedHardDel-Save")
 			.addValue(
 				CrudRequest.value(longIdJoinEmbedded)
-				.setValue("embedded", new MapStringObject()
-					.setValue("id", new MapStringObject()
-						.setValue("type", "{[EmbeddedHardDel-Save].id.type}")
-						.setValue("code", "{[EmbeddedHardDel-Save].id.code}")
+				.assign("embedded", new MapObject()
+					.assign("id", new MapObject()
+						.assign("type", "{[EmbeddedHardDel-Save].id.type}")
+						.assign("code", "{[EmbeddedHardDel-Save].id.code}")
 					)
 				)
 			)
@@ -222,7 +222,7 @@ class BulkController {
 		BulkList list = new BulkList()
 		.setUseNative(useNative)
 		.setStateless(!Boolean.FALSE.equals(stateless))
-		.setTrxManagerInfo(ObjectHelper.callIf(Boolean.TRUE.equals(oneSession), () -> trxManagerInfo))
+		.setTrxManagerInfo(Boolean.TRUE.equals(oneSession) ? trxManagerInfo : null)
 		
 		.addRequest(
 			BulkRequest.list(eiCompositeHardDel)

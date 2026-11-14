@@ -5,20 +5,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.HandlerMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import net.ideahut.springboot.annotation.Public;
 import net.ideahut.springboot.api.ApiService;
-import net.ideahut.springboot.api.ApiTokenSysParam;
-import net.ideahut.springboot.helper.ObjectHelper;
-import net.ideahut.springboot.helper.StringHelper;
+import net.ideahut.springboot.api.ApiSource;
 import net.ideahut.springboot.helper.WebMvcHelper;
 import net.ideahut.springboot.rest.RestMethod;
 import net.ideahut.springboot.rest.RestRequest;
@@ -31,6 +31,8 @@ import net.ideahut.springboot.rest.RestResponse;
 @RestController
 @RequestMapping("/proxy")
 class ProxyController {
+	
+	private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 	
 	private final ApiService apiService;
 	
@@ -47,13 +49,11 @@ class ProxyController {
 	 */
 	@Public
 	@PostMapping("/token")
-	public void token(
+	public String token(
 		@RequestParam("apiName") String apiName
 	) {
-		String token = apiService.getApiTokenService().retrieveApiToken(apiService, apiName);
-		if (!StringHelper.isEmpty(token) && ObjectHelper.isInstance(ApiTokenSysParam.class, apiService.getApiTokenService())) {
-			((ApiTokenSysParam) apiService.getApiTokenService()).updateSysParamApiToken(apiName, token);
-		}
+		ApiSource apiSource = apiService.getApiSource(apiName);
+		return apiService.getApiSourceGate(apiSource).createApiToken(apiSource);
 	}
 
 	/*
@@ -75,37 +75,33 @@ class ProxyController {
 			RequestMethod.TRACE
 		}
 	)
-	public byte[] request(
+	public ResponseEntity<byte[]> request(
 		@PathVariable("apiName") String apiName,
-		HttpServletRequest httpRequest,
-		HttpServletResponse httpResponse
-	) {
-		// replace prefix path, dan path sisanya akan diappend ke base url service yang dituju
-		String path = httpRequest
-		.getServletPath()
-		.replace("/proxy/request/" + apiName, "");
-		String apiToken = apiService.getApiTokenService().getSysParamApiToken(apiName);
-		RestRequest restRequest = new RestRequest()
-		.setPath(path)
+		HttpServletRequest httpRequest
+	) throws Exception {
+		String fullPath = (String) httpRequest.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+	    String matchPattern = (String) httpRequest.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+	    String apiPath = pathMatcher.extractPathWithinPattern(matchPattern, fullPath);
+	    RestRequest restRequest = new RestRequest()
+		.setPath("/" + apiPath)
 		.setMethod(RestMethod.valueOf(httpRequest.getMethod().toUpperCase()))
-		.setQueryString(httpRequest.getQueryString())
+		.setQueryString(WebMvcHelper.getQueryString(httpRequest))
 		.setHeaders(WebMvcHelper.getHeaders(httpRequest));
-		ObjectHelper.callOrElse(
-			!RestMethod.GET.equals(restRequest.getMethod()), 
-			() -> {
-				byte[] requestBody = WebMvcHelper.getBodyAsBytes(httpRequest);
-				return restRequest.setBody(requestBody);
-			}, 
-			() -> restRequest.getHeaders().remove(HttpHeaders.CONTENT_LENGTH)
-		);
-		RestResponse restResponse = apiService.callApiEndpoint(apiName, restRequest, apiToken);
+		if (!RestMethod.GET.equals(restRequest.getMethod())) {
+			byte[] requestBody = WebMvcHelper.getBodyAsBytes(httpRequest);
+			restRequest.setBody(requestBody);
+		} else {
+			restRequest.getHeaders().remove(HttpHeaders.CONTENT_LENGTH);
+		}
+		RestResponse restResponse = apiService.callEndpoint(apiName, restRequest).throwError();
+		ResponseEntity<byte[]> responseEntity = ResponseEntity
+		.status(restResponse.getStatus())
+		.body(restResponse.getBodyAsByteArray());
 		for (String restHeaderName : restResponse.getHeaderNames()) {
 			List<String> restHeaderValues = restResponse.getHeaderValues(restHeaderName);
-			for (String restHeaderValue : restHeaderValues) {
-				httpResponse.addHeader(restHeaderName, restHeaderValue);
-			}
+			responseEntity.getHeaders().addAll(restHeaderName, restHeaderValues);
 		}
-		return restResponse.getBodyAsByteArray();
+		return responseEntity;
 	}
 	
 }

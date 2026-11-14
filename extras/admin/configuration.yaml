@@ -13,7 +13,7 @@ api:
 
 web:
    title: "Template-SpringBoot-WebMvc-3x"
-   indexFile: "index.html"
+   #logo: "file:{user.dir}/extras/admin/logo.png"
    alwaysToIndex: true
    color:
       ## css color
@@ -37,6 +37,7 @@ web:
       - "icons"
       - "favicon.ico"
       - "index.html"
+      - "logo.png"
 
 grid:
    enable: true
@@ -52,15 +53,29 @@ role:
 
 modules:
    reload:
+      icon: "cloud_sync"
       #title:
       #enable:
       #order:
       #path:
-   cache: null
-   redis: null
-   grid: null
-   audit: null
-   entity: null
-   scheduler: null
-   task: null
-   request: null
+   cache:
+       icon: "outbox"
+   lister:
+       icon: "list"
+   redis:
+       icon: "storage"
+   grid:
+       icon: "grid_on"
+   audit:
+       icon: "receipt_long"
+   kafka:
+       icon: "air"
+   entity:
+       icon: "schema"
+   scheduler:
+       icon: "schedule"
+   task:
+       icon: "pending_actions"
+   request:
+       icon: "route"
+       title: "Endpoint"

@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import net.ideahut.springboot.admin.AdminHandler;
 import net.ideahut.springboot.advice.WebMvcAdvice;
 import net.ideahut.springboot.helper.FrameworkHelper;
-import net.ideahut.springboot.helper.ObjectHelper;
 import net.ideahut.springboot.helper.StringHelper;
-import net.ideahut.springboot.object.StringSet;
+import net.ideahut.springboot.object.SetString;
 
 /*
  * - Untuk menghandle semua error yang terjadi di aplikasi
@@ -42,16 +41,19 @@ class AppAdvice extends WebMvcAdvice {
 
 	@Override
 	protected Collection<String> exceptionSkipPaths() {
-		StringSet skipPaths = new StringSet();
-		skipPaths.add(adminHandler.getWebPath() + "/**");
-		return skipPaths;
+		return new SetString()
+		.assign(adminHandler.getWebPath() + "/**")
+		.assign(adminHandler.getApiPath() + "/login")
+		.assign(adminHandler.getApiPath() + "/logout");
 	}
 
 	@Override
 	protected Collection<String> bodyWriteSkipPaths() {
 		String actuatorBasePath = FrameworkHelper.getActuatorBasePath(applicationContext);
-		StringSet skipPaths = new StringSet();
-		ObjectHelper.runIf(!StringHelper.isBlank(actuatorBasePath), () -> skipPaths.add(actuatorBasePath + "/**"));
+		SetString skipPaths = new SetString();
+		if (!StringHelper.isBlank(actuatorBasePath)) {
+			skipPaths.assign(actuatorBasePath + "/**");
+		}
 		return skipPaths;
 	}
 	

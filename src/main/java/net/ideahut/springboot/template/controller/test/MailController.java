@@ -16,7 +16,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.ideahut.springboot.annotation.Public;
 import net.ideahut.springboot.helper.ErrorHelper;
-import net.ideahut.springboot.helper.ObjectHelper;
 import net.ideahut.springboot.helper.StringHelper;
 import net.ideahut.springboot.mail.MailHandler;
 import net.ideahut.springboot.mail.MailObject;
@@ -54,12 +53,12 @@ class MailController {
 	}
 	
 	@PostMapping("/send/sync")
-	public Result sendSync(@ModelAttribute Form form) {
+	public Result sendSync(@ModelAttribute Form form) throws Exception {
 		return sendMail(form, false);
 	}
 	
 	@PostMapping("/send/async")
-	public Result sendAsync(@ModelAttribute Form form) {
+	public Result sendAsync(@ModelAttribute Form form) throws Exception {
 		return sendMail(form, true);
 	}
 	
@@ -74,63 +73,51 @@ class MailController {
 		}
 	}
 	
-	private Result sendMail(Form form, boolean async) {
+	private Result sendMail(Form form, boolean async) throws Exception {
 		MailObject mail = new MailObject();
-		mail.setSubject(ObjectHelper.useOrElse(!StringHelper.isBlank(form.getSubject()), form.getSubject(), "Test-Mail"));
-		mail.setHtmlText(ObjectHelper.useOrElse(!StringHelper.isBlank(form.getContent()), form.getContent(), "Ini adalah contoh email"));
-		ObjectHelper.callIf(!StringHelper.isBlank(form.getFrom()), () -> mail.setFrom(toInternetAddress(form.getFrom(), form.getFrom())));
-		ObjectHelper.callIf(
-			form.getTo() != null && !form.getTo().isEmpty(), 
-			() -> {
-				List<InternetAddress> lto = form.getTo()
-				.stream()
-				.filter(email -> !StringHelper.isBlank(email))
-				.map(email -> toInternetAddress(email, email))
-				.toList();
-				return mail.setTo(lto.toArray(new InternetAddress[0]));
-			}
-		);
-		ObjectHelper.callIf(
-			form.getCc() != null && !form.getCc().isEmpty(), 
-			() -> {
-				List<InternetAddress> lcc = form.getCc()
-				.stream()
-				.filter(email -> !StringHelper.isBlank(email))
-				.map(email -> toInternetAddress(email, email))
-				.toList();
-				return mail.setCc(lcc.toArray(new InternetAddress[0]));
-			}
-		);
-		ObjectHelper.callIf(
-			form.getBcc() != null && !form.getBcc().isEmpty(), 
-			() -> {
-				List<InternetAddress> lbcc = form.getBcc()
-				.stream()
-				.filter(email -> !StringHelper.isBlank(email))
-				.map(email -> toInternetAddress(email, email))
-				.toList();
-				return mail.setBcc(lbcc.toArray(new InternetAddress[0]));
-			}
-		);
-		return ObjectHelper.callOrElse(
-			form.getAttachment() == null, 
-			() -> {
-				mailHandler.send(mail, async);
-				return Result.success();
-			},
-			() -> {
-				Attachment attachment = Attachment.of("Attachment", form.getAttachment().getBytes(), form.getAttachment().getContentType());
-				 mail
-		        .setMultipart(true)
-		        .setAttachment(attachment);
-				mailHandler.send(mail, async);
-				return Result.success()
-				.setInfo("name", form.getAttachment().getName())
-				.setInfo("fileName", form.getAttachment().getOriginalFilename())
-				.setInfo("contentType", form.getAttachment().getContentType())
-				.setInfo("contentLength", form.getAttachment().getSize());
-			}
-		);
+		mail.setSubject(!StringHelper.isBlank(form.getSubject()) ? form.getSubject() : "Test-Mail");
+		mail.setHtmlText(!StringHelper.isBlank(form.getContent()) ? form.getContent() : "Ini adalah contoh email");
+		if (!StringHelper.isBlank(form.getFrom())) {
+			mail.setFrom(toInternetAddress(form.getFrom(), form.getFrom()));
+		}
+		if (form.getTo() != null && !form.getTo().isEmpty()) {
+			List<InternetAddress> lto = form.getTo()
+			.stream()
+			.filter(email -> !StringHelper.isBlank(email))
+			.map(email -> toInternetAddress(email, email))
+			.toList();
+			mail.setTo(lto.toArray(new InternetAddress[0]));
+		}
+		if (form.getCc() != null && !form.getCc().isEmpty()) {
+			List<InternetAddress> lcc = form.getCc()
+			.stream()
+			.filter(email -> !StringHelper.isBlank(email))
+			.map(email -> toInternetAddress(email, email))
+			.toList();
+			mail.setCc(lcc.toArray(new InternetAddress[0]));
+		}
+		if (form.getBcc() != null && !form.getBcc().isEmpty()) {
+			List<InternetAddress> lbcc = form.getBcc()
+			.stream()
+			.filter(email -> !StringHelper.isBlank(email))
+			.map(email -> toInternetAddress(email, email))
+			.toList();
+			mail.setBcc(lbcc.toArray(new InternetAddress[0]));
+		}
+		if (form.getAttachment() != null) {
+			Attachment attachment = Attachment.of("Attachment", form.getAttachment().getBytes(), form.getAttachment().getContentType());
+			 mail
+	        .setMultipart(true)
+	        .setAttachment(attachment);
+			 mailHandler.send(mail, async);
+			return Result.success()
+			.setInfo("name", form.getAttachment().getName())
+			.setInfo("fileName", form.getAttachment().getOriginalFilename())
+			.setInfo("contentType", form.getAttachment().getContentType())
+			.setInfo("contentLength", form.getAttachment().getSize());
+		}
+		mailHandler.send(mail, async);
+		return Result.success();
 	}
 	
 }

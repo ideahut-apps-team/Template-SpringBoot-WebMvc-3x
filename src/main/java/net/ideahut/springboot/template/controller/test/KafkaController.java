@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ideahut.springboot.annotation.Public;
+import net.ideahut.springboot.helper.StringHelper;
 import net.ideahut.springboot.helper.ThreadHelper;
 import net.ideahut.springboot.kafka.KafkaHandler;
 import net.ideahut.springboot.kafka.KafkaSender;
@@ -79,7 +80,7 @@ class KafkaController {
 	) {
 		KafkaSender<String, byte[]> bytesSender = kafkaHandler.getStaticSender("SAMPLE.BYTES");
 		for (int i = 0; i < total; i++) {
-			bytesSender.send((text + "::BYTES::" + System.nanoTime()).getBytes());
+			bytesSender.send(StringHelper.toBytes(text + "::BYTES::" + System.nanoTime()));
 		}
 		return Result.success();
 	}

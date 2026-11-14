@@ -5,6 +5,7 @@ import java.net.URL;
 import org.quartz.JobExecutionContext;
 
 import net.ideahut.springboot.helper.FrameworkHelper;
+import net.ideahut.springboot.helper.StringHelper;
 import net.ideahut.springboot.job.JobBase;
 
 public class PageScrapperJob extends JobBase {
@@ -14,7 +15,7 @@ public class PageScrapperJob extends JobBase {
 		String source = getConfigValue(context, String.class, "URL", "https://google.com");
 		URL url = new URL(source);
 		byte[] bytes = FrameworkHelper.toByteArray(url.openStream());
-		String content = new String(bytes);
+		String content = StringHelper.toString(bytes);
 		logger().info(content);
 	}
 

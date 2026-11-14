@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.http.CacheControl;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -18,6 +17,7 @@ import net.ideahut.springboot.admin.AdminHandler;
 import net.ideahut.springboot.config.WebMvcConfig;
 import net.ideahut.springboot.helper.ErrorHelper;
 import net.ideahut.springboot.helper.ObjectHelper;
+import net.ideahut.springboot.interceptor.WebMvcInterceptor;
 import net.ideahut.springboot.mapper.DataMapper;
 import net.ideahut.springboot.object.TimeValue;
 import net.ideahut.springboot.task.TaskHandler;
@@ -33,20 +33,20 @@ import net.ideahut.springboot.template.app.AppConstant;
 class WebConfig extends WebMvcConfig {
 	
 	private final DataMapper dataMapper;
-	private final HandlerInterceptor handlerInterceptor;
+	private final WebMvcInterceptor webMvcInterceptor;
 	private final AdminHandler adminHandler;
 	private final AsyncTaskExecutor asyncTaskExecutor;
 	
 	@Autowired
 	WebConfig(
 		DataMapper dataMapper,
-		HandlerInterceptor handlerInterceptor,
+		WebMvcInterceptor webMvcInterceptor,
 		AdminHandler adminHandler,
 		@Qualifier(AppConstant.Bean.Task.WEB_ASYNC)
 		TaskHandler taskHandler
 	) {
 		this.dataMapper = dataMapper;
-		this.handlerInterceptor = handlerInterceptor;
+		this.webMvcInterceptor = webMvcInterceptor;
 		this.adminHandler = adminHandler;
 		AsyncTaskExecutor asyncTaskExecutorEi = null;
 		if (ObjectHelper.isInstance(TaskManager.class, taskHandler)) {
@@ -63,9 +63,9 @@ class WebConfig extends WebMvcConfig {
 	}
 	
 	@Override
-	protected Collection<HandlerInterceptor> handlerInterceptors() {
+	protected Collection<WebMvcInterceptor> interceptors() {
 		return Arrays.asList(
-			handlerInterceptor
+			webMvcInterceptor
 		);
 	}
 
@@ -88,7 +88,7 @@ class WebConfig extends WebMvcConfig {
 			registry
 			.addResourceHandler(adminHandler.getWebPath() + "/**")
 			.addResourceLocations(adminHandler.getWebLocation())
-			.setCacheControl(CacheControl.maxAge(maxAge.getValue(), maxAge.getUnit()))
+			.setCacheControl(CacheControl.maxAge(maxAge.getValue(), maxAge.getTimeUnit()))
 	        .resourceChain(adminHandler.isWebResourceChain())
 	        .addResolver(new VersionResourceResolver().addContentVersionStrategy(adminHandler.getWebPath() + "/**"));
 		}

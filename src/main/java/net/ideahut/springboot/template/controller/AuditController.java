@@ -43,17 +43,14 @@ class AuditController {
 		byte[] data = WebMvcHelper.getBodyAsBytes(httpRequest);
 		AuditRequest auditRequest = auditHandler.getRequest(data);
 		String entity = ObjectHelper.useOrDefault(auditRequest.getEntity(), "").trim();
-		ObjectHelper.callIf(
-			!StringHelper.isEmpty(entity) && auditRequest.getClassOfEntity() == null, 
-			() -> {
-				Class<?> classOfEntity = ObjectHelper.useOrDefault(
-					ObjectHelper.safeClassOf(entity), 
-					() -> ObjectHelper.safeClassOf(Application.Package.APPLICATION + ".entity." + entity)
-				);
-				ErrorHelper.throwNull(classOfEntity, () -> "Entity not found: " + entity);
-				return auditRequest.setClassOfEntity(classOfEntity);
+		if (!StringHelper.isEmpty(entity) && auditRequest.getClassOfEntity() == null) {
+			Class<?> classOfEntity = ObjectHelper.safeClassOf(entity);
+			if (classOfEntity == null) {
+				classOfEntity = ObjectHelper.safeClassOf(Application.Package.APPLICATION + ".entity." + entity);
 			}
-		);			
+			ErrorHelper.throwNull(classOfEntity, () -> "Entity not found: " + entity);
+			auditRequest.setClassOfEntity(classOfEntity);
+		}			
 		Page page = auditHandler.getList(auditRequest);
 		return Result.success(page);
 	}

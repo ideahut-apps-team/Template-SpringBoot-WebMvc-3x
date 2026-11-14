@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import net.ideahut.springboot.annotation.Public;
-import net.ideahut.springboot.object.StringList;
-import net.ideahut.springboot.object.StringMap;
-import net.ideahut.springboot.object.StringSet;
+import net.ideahut.springboot.object.ListString;
+import net.ideahut.springboot.object.MapString;
+import net.ideahut.springboot.object.SetString;
 import net.ideahut.springboot.template.service.MessageService;
 
 /*
@@ -46,12 +46,12 @@ class MessageController {
 	}
 	
 	@PostMapping(value = "/translate/map")
-	public StringMap translateMap(@RequestBody StringSet codes) {
+	public MapString translateMap(@RequestBody SetString codes) {
 		return messageService.getMap(codes.toArray(new String[0]));
 	}
 	
 	@PostMapping(value = "/translate/list")
-	public StringList translateList(@RequestBody StringList codes) {
+	public ListString translateList(@RequestBody ListString codes) {
 		return messageService.getList(codes.toArray(new String[0]));
 	}
 	
