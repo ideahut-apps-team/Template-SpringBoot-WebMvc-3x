@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.ideahut.springboot.definition.LauncherDefinition;
 import net.ideahut.springboot.helper.FrameworkHelper;
 import net.ideahut.springboot.helper.ObjectHelper;
+import net.ideahut.springboot.helper.StringHelper;
 import net.ideahut.springboot.job.SchedulerHandler;
 import net.ideahut.springboot.launcher.WebLauncher;
 import net.ideahut.springboot.launcher.WebMvcLauncher;
@@ -58,11 +59,14 @@ public class Application extends WebMvcLauncher {
 		setReady(true);
 		AppProperties appProperties = FrameworkHelper.getBean(applicationContext, AppProperties.class);
 		if (Boolean.TRUE.equals(appProperties.getAutoStartScheduler())) {
-			try {
-				FrameworkHelper.getBean(applicationContext, SchedulerHandler.class).start();
-			} catch (Exception e) {
-				log.error("Failed to start Scheduler");
-			}
+			FrameworkHelper.getMapBean(applicationContext, SchedulerHandler.class)
+			.forEach((name, scheduler) -> {
+				try {
+					scheduler.start();
+				} catch (Exception e) {
+					log.error(StringHelper.format("Failed to start scheduler: {}", name), e);
+				}
+			});
 		}
 		NativeConfig.registerToNativeImageAgent(applicationContext);
 	}

@@ -21,7 +21,6 @@ import net.ideahut.springboot.security.WebMvcSecurity;
 @RequestMapping("/_/api")
 class AdminController extends WebMvcAdminController {
 	
-	private final DataMapper dataMapper;
 	private final AdminHandler adminHandler;
 	private final WebMvcSecurity webSecurity;
 	
@@ -31,14 +30,8 @@ class AdminController extends WebMvcAdminController {
 		AdminHandler adminHandler,
 		WebMvcSecurity webSecurity
 	) {
-		this.dataMapper = dataMapper;
 		this.adminHandler = adminHandler;
 		this.webSecurity = webSecurity;
-	}
-	
-	@Override
-	protected DataMapper dataMapper() {
-		return dataMapper;
 	}
 	
 	@Override
@@ -47,7 +40,7 @@ class AdminController extends WebMvcAdminController {
 	}
 	
 	@Override
-	protected WebMvcSecurity webMvcSecurity() {
+	protected WebMvcSecurity webSecurity() {
 		return webSecurity;
 	}
 	

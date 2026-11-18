@@ -3,6 +3,8 @@ package net.ideahut.springboot.template.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.ideahut.springboot.annotation.Body;
+import net.ideahut.springboot.annotation.Public;
 import net.ideahut.springboot.audit.AuditHandler;
 import net.ideahut.springboot.audit.AuditRequest;
 import net.ideahut.springboot.helper.ErrorHelper;
@@ -23,6 +27,7 @@ import net.ideahut.springboot.template.Application;
 /*
  * API untuk melihat data audit
  */
+@Public
 @ComponentScan
 @RestController
 @RequestMapping("/audit")
@@ -36,7 +41,6 @@ class AuditController {
 	) {
 		this.auditHandler = auditHandler;
 	}
-	
 	
 	@PostMapping(value = "/list")
 	public Result list(HttpServletRequest httpRequest) throws Exception {
@@ -55,15 +59,18 @@ class AuditController {
 		return Result.success(page);
 	}
 	
-	
+	@Body // <- tambahkan @Body agar bytes langsung dikirim, tidak disusun lagi sesuai standar framework
 	@GetMapping(value = "/bytes")
-	public Result bytes(
+	public ResponseEntity<byte[]> bytes(
 		@RequestParam(name = "manager", required = false) String manager,
 		@RequestParam(name = "id") String id
 	) {
 		byte[] bytes = auditHandler.getBytes(manager, id);
-		return Result.success(bytes);
+		bytes = bytes != null ? bytes : ObjectHelper.emptyBinary();
+		return ResponseEntity.ok()
+		.contentType(MediaType.APPLICATION_OCTET_STREAM)
+		.contentLength(bytes.length)
+		.body(bytes);
 	}
-	
 	
 }

@@ -11,8 +11,6 @@ debug: false
 spring:
     application:
         name: template-springboot-mvc-3x
-    quartz:
-        auto-startup: false
     servlet:
         multipart:
             max-request-size: 32MB # total request size

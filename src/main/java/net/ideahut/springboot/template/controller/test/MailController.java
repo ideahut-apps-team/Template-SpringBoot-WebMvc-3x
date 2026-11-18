@@ -73,7 +73,7 @@ class MailController {
 		}
 	}
 	
-	private Result sendMail(Form form, boolean async) throws Exception {
+	private MailObject createMail(Form form) {
 		MailObject mail = new MailObject();
 		mail.setSubject(!StringHelper.isBlank(form.getSubject()) ? form.getSubject() : "Test-Mail");
 		mail.setHtmlText(!StringHelper.isBlank(form.getContent()) ? form.getContent() : "Ini adalah contoh email");
@@ -104,6 +104,11 @@ class MailController {
 			.toList();
 			mail.setBcc(lbcc.toArray(new InternetAddress[0]));
 		}
+		return mail;
+	}
+	
+	private Result sendMail(Form form, boolean async) throws Exception {
+		MailObject mail = createMail(form);
 		if (form.getAttachment() != null) {
 			Attachment attachment = Attachment.of("Attachment", form.getAttachment().getBytes(), form.getAttachment().getContentType());
 			 mail

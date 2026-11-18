@@ -122,7 +122,7 @@ class BulkController {
 				.addFilter(Filter.or("name", Condition.ANY_LIKE, "cobxx"))
 				.addFilter(Filter.or("name", Condition.ANY_LIKE, "tesxx"))
 			)
-			.addFilter(Filter.and("date", Condition.BETWEEN, "2024-01-01 00:00:00", "2024-01-31 23:59:59"))
+			.addFilter(Filter.and("date", Condition.BETWEEN, "2026-01-01 00:00:00", "2026-12-31 23:59:59"))
 			.addOrder("-createdOn")
 		);
 		

@@ -2,6 +2,7 @@ package net.ideahut.springboot.template.controller.test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -102,7 +103,9 @@ class BasicController {
 	}
 	
 	@GetMapping("/outstream")
-	public void outstream(HttpServletResponse response) {
+	public void outstream(
+		HttpServletResponse response
+	) {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() {
 			private byte[] bytes = StringHelper.toBytes("Haloooo-" + System.nanoTime());
 			@Override
@@ -120,7 +123,9 @@ class BasicController {
 	// contoh download streaming, liat WebConfig bagian configureAsyncSupport
 	// proses output stream secara asinkron menggunakan taskExecutor
 	@GetMapping("/download")
-	public StreamingResponseBody download(HttpServletResponse response) {
+	public StreamingResponseBody download(
+		HttpServletResponse response
+	) {
 		return new StreamingResponseBody() {
 			@Override
 			public void writeTo(OutputStream outputStream) throws IOException {
@@ -128,12 +133,50 @@ class BasicController {
 					response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + System.nanoTime() + ".txt\"");
 					response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
 					for (int i = 0; i < 10; i++) {
-						outputStream.write(StringHelper.toBytes("DATA-" + i + "\n"));
-						outputStream.flush();
 						
 						// simulasi proses write yang lambat
 						TimeUnit.SECONDS.sleep(1);
+						
+						outputStream.write(StringHelper.toBytes("DATA-" + i + "\n"));
+						outputStream.flush();
 					}
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				} catch (Exception e) {
+					throw new IOException(e);
+				}
+			}
+		};
+	}
+	
+	// contoh streaming baca request dan kirim response
+	@PostMapping("/streaming")
+	public StreamingResponseBody streaming(
+		@RequestParam(name = "buffer", required = false) Integer buffer,
+		@RequestParam(name = "delay", required = false) Integer delay,
+		HttpServletRequest request
+	) {
+		return new StreamingResponseBody() {
+			@Override
+			public void writeTo(OutputStream outputStream) throws IOException {
+				InputStream inputStream = request.getInputStream();
+				try {
+					Integer sleep = delay != null && delay > 0 ? delay : 100;
+					Integer bufferSize = buffer != null && buffer > 0 ? buffer : 16;
+					byte[] bytesBuffer = new byte[bufferSize];
+					long totalBytes = 0;
+		            int bytesRead;
+		            while ((bytesRead = inputStream.read(bytesBuffer)) != -1) {
+		            	
+		            	// simulasi proses write yang lambat
+						TimeUnit.MILLISECONDS.sleep(sleep);
+		            	
+		                outputStream.write(bytesBuffer, 0, bytesRead);
+		                outputStream.flush();
+		                totalBytes += bytesRead;
+		            }
+		            byte[] endStreaming = StringHelper.toBytes("\n\nTotal Bytes: " + totalBytes);
+		            outputStream.write(endStreaming, 0, endStreaming.length);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				} catch (Exception e) {

@@ -162,17 +162,6 @@ class CrudController extends WebMvcCrudController {
 	}
 	
 	/*
-	 * SINGLE
-	 */
-	@Override
-	@GetMapping(value = "/rest")
-	public Result single(
-		HttpServletRequest httpRequest
-	) {
-		return super.single(httpRequest);
-	}
-	
-	/*
 	 * PAGE
 	 */
 	@Override
@@ -181,6 +170,17 @@ class CrudController extends WebMvcCrudController {
 		HttpServletRequest httpRequest		
 	) {
 		return super.page(httpRequest);
+	}
+	
+	/*
+	 * SINGLE
+	 */
+	@Override
+	@GetMapping(value = "/rest")
+	public Result single(
+		HttpServletRequest httpRequest
+	) {
+		return super.single(httpRequest);
 	}
 	
 	/*
