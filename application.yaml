@@ -697,7 +697,7 @@ config:
                 #- net.ideahut.springboot.template.entity.Role
                 #- net.ideahut.springboot.template.entity.User
                 #- net.ideahut.springboot.template.entity.UserDetail
-                #- net.ideahut.springboot.template.entity.UserFavorite                
+                #- net.ideahut.springboot.template.entity.UserFavorite
                 
             audit:
                 id: template_springboot_mvc_1
